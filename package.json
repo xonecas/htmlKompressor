@@ -1,0 +1,20 @@
+{
+  "name": "htmlKompressor",
+  "description": "Node.js Module for compressing html files",
+  "version": "0.0.1",
+  "main": "lib/kompressor.js",
+  "homepage": "https://github.com/xonecas/htmlKompressor",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xonecas/htmlKompressor.git"
+  },
+  "author": {
+    "name" : "Sean Caetano Martin",
+    "email" : "seancaetanomartin@gmail.com",
+    "url" : "http://www.xonecas.com/"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
+
