@@ -1,0 +1,12 @@
+nbproject/
+nbactions.xml
+
+.DS_Store
+
+node_modules
+*.log
+*.lock
+*.pid
+.bundle
+.coverage_data
+

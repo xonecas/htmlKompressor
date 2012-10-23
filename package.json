@@ -13,8 +13,14 @@
     "email" : "seancaetanomartin@gmail.com",
     "url" : "http://www.xonecas.com/"
   },
+  "devDependencies": {
+    "vows": "0.6.x"
+  },
   "engines": {
     "node": "*"
+  },
+  "scripts": {
+    "test": "vows test/html-test.js --spec"
   }
 }
 
