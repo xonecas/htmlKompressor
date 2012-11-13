@@ -81,6 +81,18 @@ vows.describe('We test minifying HTML').addBatch({
         assert.isTrue(/<style>.toto {color:red}\r\n.toto a {text-decoration:none}\r\n<\/style>/.test(obj.transformedBody));
       }
     }
+  },
+  'Given some html with a textarea': {
+    'topic': '<textarea>Super text\r\nSuper</textarea>',
+
+    'when minifying': {
+      'topic': function(html) {
+        return Kompressor(html);
+      },
+      'the content of the textarea tags should remain untouched': function(obj) {
+        assert.isTrue(/<textarea>Super text\r\nSuper<\/textarea>/.test(obj));
+      }
+    }
   }
 }).export(module); // Run it
 
