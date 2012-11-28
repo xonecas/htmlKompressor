@@ -66,6 +66,23 @@ vows.describe('We test minifying HTML').addBatch({
 
     }
   },
+  'Given some html with scripts followed by script': {
+    'topic':'<html><head><script>var toto=1;toto=3;</script><script>\r\nvar tata=1;\r\ndocument.write(tata);\r\n</script></head><body>hello\r\nworld\r\n\t\ttabs</body></html>',
+    'when minifying': {
+      'topic': function(html) {
+        var inputLength = html.length;
+        return {'transformedBody':Kompressor(html, true), 'inputLength':inputLength};
+      },
+      'the minified HTML is smaller than original HTML': function(obj) {
+        assert.isTrue(obj.transformedBody.length < obj.inputLength);
+      },
+      ' and scripts should remain untouched': function(obj) {
+        console.log(obj.transformedBody);
+        assert.isTrue(/<script>var toto=1;toto=3;<\/script><script>\r\nvar tata=1;\r\ndocument\.write\(tata\);\r\n<\/script>/.test(obj.transformedBody));
+      },
+
+    }
+  },
   'Given some html with style': {
     'topic': '<html><head><style>.toto {color:red}\r\n.toto a {text-decoration:none}\r\n</style></head><body>hello\r\nworld\r\n\t\ttabs</body></html>',
 
