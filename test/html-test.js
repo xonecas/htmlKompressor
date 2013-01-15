@@ -77,7 +77,6 @@ vows.describe('We test minifying HTML').addBatch({
         assert.isTrue(obj.transformedBody.length < obj.inputLength);
       },
       ' and scripts should remain untouched': function(obj) {
-        console.log(obj.transformedBody);
         assert.isTrue(/<script>var toto=1;toto=3;<\/script><script>\r\nvar tata=1;\r\ndocument\.write\(tata\);\r\n<\/script>/.test(obj.transformedBody));
       },
 
@@ -110,7 +109,12 @@ vows.describe('We test minifying HTML').addBatch({
         assert.isTrue(/<textarea>Super text\r\nSuper<\/textarea>/.test(obj));
       }
     }
+  },
+  'Given some html with urls with spaces': {
+    'topic': Kompressor("\t <tag  src=\"/  test.jpg\"  href='/  test2.html' other = \"  other  attribute  \"  />  \r\n<tag title=\"  Title  \" /> \t        "),
+    'the content of attributes should remain untouched, only spaces at the beginning and the end of line should be condensed': function(obj) {
+      assert.equal(obj,
+                   '<tag  src="/  test.jpg"  href=\'/  test2.html\' other = "  other  attribute  "  /> <tag title="  Title  " /> ');
+    }
   }
 }).export(module); // Run it
-
-
