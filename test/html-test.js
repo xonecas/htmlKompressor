@@ -62,8 +62,23 @@ vows.describe('We test minifying HTML').addBatch({
       },
       ' and HTML comments in script tags should be removed': function(obj) {
         assert.isTrue(/<script><!--\/\/\[\[CDATA\r\nvar toto=1;\r\ntoto=3;\r\n\]\]\/\/--><\/script>/.test(obj.transformedBody));
-      },
+      }
+    }
+  },
+  'Given some html with multiple script tags with inner comment': {
+    'topic': '<html><head><script><!--//[[CDATA\r\nvar toto=1;\r\ntoto=3;\r\n]]//--></script><script><!--//[[CDATA\r\nvar toto=1;\r\ntoto=3;\r\n]]//--></script></head><body>hello\r\nworld\r\n\t\ttabs</body></html>',
 
+    'when minifying': {
+      'topic': function(html) {
+        var inputLength = html.length;
+        return {'transformedBody':Kompressor(html, true), 'inputLength':inputLength};
+      },
+      'the minified HTML is smaller than original HTML': function(obj) {
+        assert.isTrue(obj.transformedBody.length < obj.inputLength);
+      },
+      ' and HTML comments in script tags should be removed': function(obj) {
+        assert.isTrue(/<script><!--\/\/\[\[CDATA\r\nvar toto=1;\r\ntoto=3;\r\n\]\]\/\/--><\/script><script><!--\/\/\[\[CDATA\r\nvar toto=1;\r\ntoto=3;\r\n\]\]\/\/--><\/script>/.test(obj.transformedBody));
+      }
     }
   },
   'Given some html with scripts followed by script': {
