@@ -18,7 +18,7 @@ vows.describe('We test minifying HTML').addBatch({
     }
   },
   'Given some html with comments, ': {
-    'topic': '<!--[if gte IE 9]><!-->\r\n<html lang="fr">\r\n<!--<![endif]-->\n<html><head><!-- [if IE ]><style>fuck {color:red}</style><![endif]--></head><body><!-- comment 1 -->hello world<!-- another comment with [ ! --><!-- <form name="NavForm" method="get" action="/casinoexpress_web/z_catalog/rechercheNormaleResultat/(layout=7.01-8_108_7_109_110_0_114_111_112_0_133_113_127_0_88_124_0_0_117_118&uiarea=0)/.do"> --></body></html>',
+    'topic': '<!--[if gte IE 9]><!-->\r\n<html lang="fr">\r\n<!--<![endif]-->\n<html><head><!-- [if IE ]><style><!--fuck {color:red}--></style><script><!--console.log("coucou")--></script><![endif]--></head><body><pre> <!-- pre comment --></pre><!-- comment 1 -->hello world<!-- another comment with [ ! --><!-- <form name="NavForm" method="get" action="/casinoexpress_web/z_catalog/rechercheNormaleResultat/(layout=7.01-8_108_7_109_110_0_114_111_112_0_133_113_127_0_88_124_0_0_117_118&uiarea=0)/.do"> --><textarea><!-- textarea comment -->blabla</textarea></body></html>',
 
     'when minifying': {
       'topic': function(html) {
@@ -29,7 +29,7 @@ vows.describe('We test minifying HTML').addBatch({
         assert.isTrue(obj.transformedBody.length < obj.inputLength);
       },
       'and there\'s no more comment except conditionnal comments': function(obj) {
-        assert.equal(obj.transformedBody,'<!--[if gte IE 9]><!--> <html lang="fr"> <!--<![endif]--> <html><head><!--[if IE ]><style>fuck {color:red}</style><![endif]--></head><body>hello world</body></html>');
+        assert.equal(obj.transformedBody,'<!--[if gte IE 9]><!--> <html lang="fr"> <!--<![endif]--> <html><head><!--[if IE ]><style><!--fuck {color:red}--></style><script><!--console.log("coucou")--></script><![endif]--></head><body><pre><!-- pre comment --></pre>hello world<textarea><!-- textarea comment -->blabla</textarea></body></html>');
       }
     }
   },
