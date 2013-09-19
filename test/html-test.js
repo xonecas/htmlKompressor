@@ -97,6 +97,18 @@ vows.describe('We test minifying HTML').addBatch({
 
     }
   },
+  'Given some html with scripts that has a comment inside': {
+    'topic':'<script>\r\n//<!--\r\nvar toto=1;toto=3;\r\n//-->\r\n</script>',
+    'when minifying': {
+      'topic': function(html) {
+        var inputLength = html.length;
+        return {'transformedBody':Kompressor(html, true), 'inputLength':inputLength};
+      },
+      'scripts should remain untouched': function(obj) {
+        assert.equal(obj.transformedBody, '<script>//<!--\r\nvar toto=1;toto=3;\r\n//-->\r\n</script>');
+      }
+    }
+  },
   'Given some html with style': {
     'topic': '<html><head><style>.toto {color:red}\r\n.toto a {text-decoration:none}\r\n</style></head><body>hello\r\nworld\r\n\t\ttabs</body></html>',
 
