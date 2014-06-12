@@ -155,5 +155,11 @@ vows.describe('We test minifying HTML').addBatch({
       assert.equal(obj,
                    '<tag  src="/  test.jpg"  href=\'/  test2.html\' other = "  other  attribute  "  /> <tag title="  Title  " /> ');
     }
+  },
+  'Given some html with few scripts': {
+    'topic': Kompressor("<script>\nvar test = 3;\n</script><div>OK</div><script type=\"text/javascript\" language=\"javascript\">var current_page = 'NaN';\n</script>"),
+    'the content of the script should remain untouched': function(obj) {
+      assert.equal(obj,"<script>\nvar test = 3;\n</script><div>OK</div><script type=\"text/javascript\" language=\"javascript\">var current_page = 'NaN';\n</script>");
+    }
   }
 }).export(module); // Run it
