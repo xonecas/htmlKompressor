@@ -161,5 +161,11 @@ vows.describe('We test minifying HTML').addBatch({
     'the content of the script should remain untouched': function(obj) {
       assert.equal(obj,"<script>\nvar test = 3;\n</script><div>OK</div><script type=\"text/javascript\" language=\"javascript\">var current_page = 'NaN';\n</script>");
     }
+  },
+  'Given a comment in a script': {
+    'topic': Kompressor("<script>\nvar test = 3;\nvar test = 4;//comment here\nvar test = 5;</script>"),
+    'the content of the script should remain untouched': function(obj) {
+      assert.equal(obj, "<script>\nvar test = 3;\nvar test = 4;//comment here\nvar test = 5;</script>");
+    }
   }
 }).export(module); // Run it
