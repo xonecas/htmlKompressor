@@ -29,7 +29,7 @@ vows.describe('We test minifying HTML').addBatch({
         assert.isTrue(obj.transformedBody.length < obj.inputLength);
       },
       'and there\'s no more comment except conditionnal comments': function(obj) {
-        assert.equal(obj.transformedBody,'<!--[if gte IE 9]><!--> <html lang="fr"> <!--<![endif]--> <html><head><!--[if IE ]><style><!--fuck {color:red}--></style><script><!--console.log("coucou")--></script><![endif]--></head><body><pre><!-- pre comment --></pre>hello world<textarea><!-- textarea comment -->blabla</textarea></body></html>');
+        assert.equal(obj.transformedBody,'<!--[if gte IE 9]><!--> <html lang="fr"> <!--<![endif]--> <html><head><!--[if IE ]><style><!--fuck {color:red}--></style><script><!--console.log("coucou")--></script><![endif]--></head><body><pre><!-- pre comment --></pre>hello world<textarea><!-- textarea comment -->blabla</textarea></body></html> ');
       }
     }
   },
@@ -105,7 +105,7 @@ vows.describe('We test minifying HTML').addBatch({
         return {'transformedBody':Kompressor(html, true), 'inputLength':inputLength};
       },
       'scripts should remain untouched': function(obj) {
-        assert.equal(obj.transformedBody, '<script>//<!--\r\nvar toto=1;toto=3;\r\n//-->\r\n</script>');
+        assert.equal(obj.transformedBody, '<script>//<!--\r\nvar toto=1;toto=3;\r\n//-->\r\n</script> ');
       }
     }
   },
@@ -117,7 +117,7 @@ vows.describe('We test minifying HTML').addBatch({
         return {'transformedBody':Kompressor(html, true), 'inputLength':inputLength};
       },
       'scripts should remain untouched': function(obj) {
-        assert.equal(obj.transformedBody, '<script>//<!--\r\nvar toto=1;toto=3;\r\n//-->\r\n</SCRIPT>');
+        assert.equal(obj.transformedBody, '<script>//<!--\r\nvar toto=1;toto=3;\r\n//-->\r\n</SCRIPT> ');
       }
     }
   },
@@ -134,6 +134,61 @@ vows.describe('We test minifying HTML').addBatch({
       },
       'and script tags should remain untouched': function(obj) {
         assert.isTrue(/<style>.toto {color:red}\r\n.toto a {text-decoration:none}\r\n<\/style>/.test(obj.transformedBody));
+      }
+    }
+  },
+
+  'Given span tag separated by a space': {
+    'topic': '\n<span>foo</span> <span>bar</span>\n',
+
+    'when minifying': {
+      'topic': Kompressor,
+      'the content of the textarea tags should remain untouched': function(obj) {
+        assert.equal(obj, '<span>foo</span> <span>bar</span> ');
+      }
+    }
+  },
+
+  'Given span tag separated by a new line and a space': {
+    'topic': '\n<span>foo</span>\n\t<span>bar</span>\n',
+
+    'the minifier should not mangle content': {
+      'topic': Kompressor,
+      'the content of the textarea tags should remain untouched': function(obj) {
+        assert.equal(obj, '<span>foo</span> <span>bar</span> ');
+      }
+    }
+  },
+
+  'Given some html with a textarea surronded by blank': {
+    'topic': '\n<textarea>Super text \nSuper</textarea><span>foo</span>\n <span>bar</span>\n',
+
+    'when minifying': {
+      'topic': Kompressor,
+      'the content of the textarea tags should remain untouched': function(obj) {
+        assert.equal(obj, '<textarea>Super text \nSuper</textarea><span>foo</span> <span>bar</span> ');
+      }
+    }
+  },
+
+  'Given some html with two textarea surronded by blank': {
+    'topic': '\n<textarea>Super text\nSuper</textarea> <div>blabla</div> <textarea>\t',
+
+    'when minifying': {
+      'topic': Kompressor,
+      'the content of the textarea tags should remain untouched': function(obj) {
+        assert.equal(obj, '<textarea>Super text\nSuper</textarea> <div>blabla</div> <textarea>\t\n');
+      }
+    }
+  },
+
+  'Given some html with multiple textarea surronded by blank': {
+    'topic': '<textarea>\t</textarea>\n<textarea>Super text   \tSuper</textarea> <textarea>',
+
+    'when minifying': {
+      'topic': Kompressor,
+      'the content of the textarea tags should remain untouched': function(obj) {
+        assert.equal(obj, '<textarea>\t</textarea> <textarea>Super text   \tSuper</textarea> <textarea>\n');
       }
     }
   },
@@ -159,13 +214,13 @@ vows.describe('We test minifying HTML').addBatch({
   'Given some html with few scripts': {
     'topic': Kompressor("<script>\nvar test = 3;\n</script><div>OK</div><script type=\"text/javascript\" language=\"javascript\">var current_page = 'NaN';\n</script>"),
     'the content of the script should remain untouched': function(obj) {
-      assert.equal(obj,"<script>\nvar test = 3;\n</script><div>OK</div><script type=\"text/javascript\" language=\"javascript\">var current_page = 'NaN';\n</script>");
+      assert.equal(obj,"<script>\nvar test = 3;\n</script><div>OK</div><script type=\"text/javascript\" language=\"javascript\">var current_page = 'NaN';\n</script> ");
     }
   },
   'Given a comment in a script': {
     'topic': Kompressor("<script>\nvar test = 3;\nvar test = 4;//comment here\nvar test = 5;</script>"),
     'the content of the script should remain untouched': function(obj) {
-      assert.equal(obj, "<script>\nvar test = 3;\nvar test = 4;//comment here\nvar test = 5;</script>");
+      assert.equal(obj, "<script>\nvar test = 3;\nvar test = 4;//comment here\nvar test = 5;</script> ");
     }
   }
 }).export(module); // Run it
