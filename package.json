@@ -20,6 +20,6 @@
     "node": "*"
   },
   "scripts": {
-    "test": "vows test/html-test.js --spec"
+    "test": "vows test/html-test.js --spec && node bench.js"
   }
 }
